@@ -14,9 +14,42 @@
 
 @implementation AppDelegate
 
+#pragma mark - BLE Delegate
+-(void) bleDidConnect
+{
+    NSLog(@"BLE Connected");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEDidConnect" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:self.bleShield.activePeripheral.name,@"deviceName", nil]];
+}
+-(void) bleDidDisconnect
+{
+    NSLog(@"BLE Disconnected");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEDidDisconnect" object:self] ;
+}
+-(void) bleDidUpdateRSSI:(NSNumber *) rssi
+{
+    // note that this does not run consistently in the app delegate
+    NSLog(@"BLE Updated RSSI");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEUpdatedRSSI" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:rssi,@"RSSI", nil]];
+}
+-(void) bleDidReceiveData:(unsigned char *) data length:(int) length
+{
+    NSLog(@"BLE ReceivedData");
+    
+    NSData* myData = [NSData dataWithBytes:data length:length];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: myData, @"data",nil]] ;
+    
+}
+#pragma mark - Application Deletate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     // Override point for customization after application launch.
+    
+    self.bleShield = [[BLE alloc] init];
+    [self.bleShield controlSetup];
+    self.bleShield.delegate = self;
+    
     return YES;
 }
 

@@ -15,6 +15,9 @@
 		AD5E97621AC368350014F627 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD5E97601AC368350014F627 /* LaunchScreen.xib */; };
 		AD5E976E1AC368350014F627 /* BEN_A5Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5E976D1AC368350014F627 /* BEN_A5Tests.m */; };
 		AD5E977A1AC368EC0014F627 /* BLE.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5E97781AC368EC0014F627 /* BLE.m */; };
+		AD5E977E1AC371EE0014F627 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5E977D1AC371EE0014F627 /* MasterViewController.m */; };
+		AD5E97801AC376610014F627 /* UserDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD5E977F1AC376610014F627 /* UserDefaults.plist */; };
+		AD5E97831AC377D10014F627 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5E97821AC377D10014F627 /* SettingsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +47,11 @@
 		AD5E97771AC368EC0014F627 /* BLE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLE.h; sourceTree = "<group>"; };
 		AD5E97781AC368EC0014F627 /* BLE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLE.m; sourceTree = "<group>"; };
 		AD5E97791AC368EC0014F627 /* BLEDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDefines.h; sourceTree = "<group>"; };
+		AD5E977C1AC371EE0014F627 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
+		AD5E977D1AC371EE0014F627 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		AD5E977F1AC376610014F627 /* UserDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserDefaults.plist; sourceTree = "<group>"; };
+		AD5E97811AC377D10014F627 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		AD5E97821AC377D10014F627 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,13 +93,17 @@
 		AD5E97501AC368350014F627 /* BEN-A5 */ = {
 			isa = PBXGroup;
 			children = (
+				AD5E97601AC368350014F627 /* LaunchScreen.xib */,
+				AD5E975B1AC368350014F627 /* Main.storyboard */,
 				AD5E97551AC368350014F627 /* AppDelegate.h */,
 				AD5E97561AC368350014F627 /* AppDelegate.m */,
+				AD5E977C1AC371EE0014F627 /* MasterViewController.h */,
+				AD5E977D1AC371EE0014F627 /* MasterViewController.m */,
 				AD5E97581AC368350014F627 /* ViewController.h */,
 				AD5E97591AC368350014F627 /* ViewController.m */,
-				AD5E975B1AC368350014F627 /* Main.storyboard */,
+				AD5E97811AC377D10014F627 /* SettingsViewController.h */,
+				AD5E97821AC377D10014F627 /* SettingsViewController.m */,
 				AD5E975E1AC368350014F627 /* Images.xcassets */,
-				AD5E97601AC368350014F627 /* LaunchScreen.xib */,
 				AD5E97511AC368350014F627 /* Supporting Files */,
 			);
 			path = "BEN-A5";
@@ -103,6 +115,7 @@
 				AD5E977B1AC368F40014F627 /* BLE */,
 				AD5E97521AC368350014F627 /* Info.plist */,
 				AD5E97531AC368350014F627 /* main.m */,
+				AD5E977F1AC376610014F627 /* UserDefaults.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -217,6 +230,7 @@
 				AD5E975D1AC368350014F627 /* Main.storyboard in Resources */,
 				AD5E97621AC368350014F627 /* LaunchScreen.xib in Resources */,
 				AD5E975F1AC368350014F627 /* Images.xcassets in Resources */,
+				AD5E97801AC376610014F627 /* UserDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +250,8 @@
 			files = (
 				AD5E975A1AC368350014F627 /* ViewController.m in Sources */,
 				AD5E97571AC368350014F627 /* AppDelegate.m in Sources */,
+				AD5E977E1AC371EE0014F627 /* MasterViewController.m in Sources */,
+				AD5E97831AC377D10014F627 /* SettingsViewController.m in Sources */,
 				AD5E97541AC368350014F627 /* main.m in Sources */,
 				AD5E977A1AC368EC0014F627 /* BLE.m in Sources */,
 			);
