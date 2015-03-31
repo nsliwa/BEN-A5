@@ -13,6 +13,7 @@
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIProgressView *progressTemp;
 @property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
+@property (weak, nonatomic) UIImageView *miserImageView;
 @property (strong, nonatomic) UIProgressView *progressBar;
 
 @end
@@ -56,6 +57,15 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"UserDefaults" ofType:@"plist"]]];
+    
+    /*self.tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Heatmiser_normal.png"]];
+    [self.tempImageView setFrame:CGRectMake(0, 90, 30, 30)];
+    [self.view addSubview:self.tempImageView];*/
+    
+    self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Heatmiser_normal.png"]];
+    self.miserImageView.frame = CGRectMake(-8, 202, 330,20);
+    [self.view addSubview:self.miserImageView];
+
 
 }
 
@@ -66,6 +76,7 @@
 
     
     self.progressBar.progress = [self temperatureToProgress:50];
+
 }
 
 //setup auto rotation in code
