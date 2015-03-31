@@ -116,7 +116,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zK5-yQ-Q3k">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zK5-yQ-Q3k">
                                 <rect key="frame" x="145" y="456" width="30" height="30"/>
                                 <state key="normal" title="OK">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -143,15 +143,15 @@
                                     <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="ch1-No-AJv"/>
                                 </connections>
                             </switch>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-q3-a8B">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-q3-a8B">
                                 <rect key="frame" x="255" y="69" width="51" height="31"/>
                                 <connections>
                                     <action selector="onToggleManualColor:" destination="vur-9U-UwA" eventType="valueChanged" id="QfG-8X-C37"/>
                                     <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="g0j-OM-Kaf"/>
                                 </connections>
                             </switch>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="color_wheel" translatesAutoresizingMaskIntoConstraints="NO" id="LHz-sH-z5n" customClass="ColorPickerImageView">
-                                <rect key="frame" x="0.0" y="108" width="320" height="321"/>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="color_wheel_300x300" translatesAutoresizingMaskIntoConstraints="NO" id="LHz-sH-z5n">
+                                <rect key="frame" x="10" y="108" width="300" height="300"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="kdF-LJ-vrg" appends="YES" id="HVS-87-yTQ"/>
@@ -161,6 +161,13 @@
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="LHz-sH-z5n" firstAttribute="top" secondItem="Uqa-q3-a8B" secondAttribute="bottom" constant="8" symbolic="YES" id="Gi4-xH-F7Y"/>
+                            <constraint firstItem="zK5-yQ-Q3k" firstAttribute="top" secondItem="LHz-sH-z5n" secondAttribute="bottom" constant="48" id="Vhk-T7-MQE"/>
+                            <constraint firstItem="LHz-sH-z5n" firstAttribute="centerX" secondItem="zK5-yQ-Q3k" secondAttribute="centerX" id="cZi-Qn-Uh3"/>
+                            <constraint firstItem="LHz-sH-z5n" firstAttribute="top" secondItem="DKF-rG-Zvf" secondAttribute="top" constant="108" id="mJ4-PF-Wtw"/>
+                            <constraint firstItem="LHz-sH-z5n" firstAttribute="centerX" secondItem="DKF-rG-Zvf" secondAttribute="centerX" id="rTG-Hj-Y3u"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="imageColorWheel" destination="LHz-sH-z5n" id="8mz-c6-H55"/>
@@ -271,7 +278,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="color_wheel" width="2000" height="2000"/>
+        <image name="color_wheel_300x300" width="300" height="300"/>
         <image name="settings" width="512" height="512"/>
         <image name="thermometer" width="768" height="1056"/>
     </resources>

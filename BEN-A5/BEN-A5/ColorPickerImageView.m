@@ -29,7 +29,7 @@
 	CGPoint point = [touch locationInView:self]; //where image was tapped
 	self.lastColor = [self getPixelColorAtLocation:point]; 
 	NSLog(@"color %@",lastColor);
-	[pickedColorDelegate pickedColor:(UIColor*)self.lastColor];
+//	[pickedColorDelegate pickedColor:(UIColor*)self.lastColor];
 }
 
 

@@ -11,7 +11,7 @@
 @interface SettingsViewController ()
 @property (weak, nonatomic) IBOutlet UISwitch *switchVisualTemp;
 @property (weak, nonatomic) IBOutlet UISwitch *switchManualColor;
-@property (weak, nonatomic) IBOutlet ColorPickerImageView *imageColorWheel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageColorWheel;
 
 @end
 
@@ -21,7 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.imageColorWheel.pickedColorDelegate = self;
+//    self.imageColorWheel.pickedColorDelegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -89,7 +89,9 @@
         NSLog(@"X location: %f", point.x);
         NSLog(@"Y Location: %f",point.y);
         
-        [self getPixelColorAtLocation:point];
+        [self getPixelColor:self.imageColorWheel.image :point.x :point.y];
+        
+//        [self getPixelColorAtLocation:point];
     }
     
 }
@@ -114,6 +116,30 @@
     NSLog(@"color updated");
 }
 
+
+- (BOOL)getPixelColor: (UIImage *)image: (int) x :(int) y {
+    
+    CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
+    const UInt8* data = CFDataGetBytePtr(pixelData);
+    
+    NSLog(@"width: %f | lenght: %f", image.size.width, image.size.height);
+    
+    int pixelInfo = ((image.size.width  * y) + x ) * 4; // The image is png
+    
+    UInt8 red = data[pixelInfo];         // If you need this info, enable it
+    UInt8 green = data[(pixelInfo + 1)]; // If you need this info, enable it
+    UInt8 blue = data[pixelInfo + 2];    // If you need this info, enable it
+    UInt8 alpha = data[pixelInfo + 3];     // I need only this info for my maze game
+    CFRelease(pixelData);
+    
+    UIColor* color = [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:alpha/255.0f]; // The pixel color info
+    
+     NSLog(@"colors: RGB A %i %i %i  %i", red,green,blue,alpha);
+    
+    if (alpha) return YES;
+    else return NO;
+    
+}
 
 - (UIColor*) getPixelColorAtLocation:(CGPoint)point {
     UIColor* color = nil;
