@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vur-9U-UwA">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <scenes>
         <!--Root View Controller-->
@@ -79,10 +79,6 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="thermometer" translatesAutoresizingMaskIntoConstraints="NO" id="wrc-c4-osA">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </imageView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RX7-7n-x56">
-                                <rect key="frame" x="136" y="430" width="123" height="2"/>
-                                <color key="tintColor" red="1" green="0.0" blue="0.070236308712233964" alpha="1" colorSpace="calibratedRGB"/>
-                            </progressView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -101,7 +97,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="progressTemp" destination="RX7-7n-x56" id="xqP-aj-H1W"/>
+                        <outlet property="tempImageView" destination="wrc-c4-osA" id="GrA-ZE-U5Z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fw9-f2-SUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -121,7 +117,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zK5-yQ-Q3k">
-                                <rect key="frame" x="145" y="269" width="30" height="30"/>
+                                <rect key="frame" x="145" y="456" width="30" height="30"/>
                                 <state key="normal" title="OK">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -135,21 +131,60 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Manual Light Control" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovT-Dt-RHj">
+                                <rect key="frame" x="16" y="74" width="161" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mgq-7O-gsG">
-                                <rect key="frame" x="255" y="28" width="51" height="31"/>
+                                <rect key="frame" x="255" y="23" width="51" height="31"/>
                                 <connections>
                                     <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="ch1-No-AJv"/>
                                 </connections>
                             </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-q3-a8B">
+                                <rect key="frame" x="255" y="69" width="51" height="31"/>
+                                <connections>
+                                    <action selector="onToggleManualColor:" destination="vur-9U-UwA" eventType="valueChanged" id="QfG-8X-C37"/>
+                                    <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="g0j-OM-Kaf"/>
+                                </connections>
+                            </switch>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="color_wheel" translatesAutoresizingMaskIntoConstraints="NO" id="LHz-sH-z5n" customClass="ColorPickerImageView">
+                                <rect key="frame" x="0.0" y="108" width="320" height="321"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="kdF-LJ-vrg" appends="YES" id="HVS-87-yTQ"/>
+                                    <outletCollection property="gestureRecognizers" destination="wDE-13-tct" appends="YES" id="7Hp-zl-MPs"/>
+                                    <outletCollection property="gestureRecognizers" destination="Ra5-Np-0e9" appends="YES" id="OfN-Zq-wZX"/>
+                                </connections>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="imageColorWheel" destination="LHz-sH-z5n" id="8mz-c6-H55"/>
+                        <outlet property="switchManualColor" destination="Uqa-q3-a8B" id="bAD-zN-tQ6"/>
                         <outlet property="switchVisualTemp" destination="Mgq-7O-gsG" id="DaF-2o-Oz3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j4f-5c-tZB" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="CWh-Q2-woD" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="kdF-LJ-vrg">
+                    <connections>
+                        <action selector="onTapGesture:" destination="vur-9U-UwA" id="oxc-vt-4BA"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="wDE-13-tct">
+                    <connections>
+                        <action selector="onSwipeRightGesture:" destination="vur-9U-UwA" id="nmv-iT-PRf"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="Ra5-Np-0e9">
+                    <connections>
+                        <action selector="onSwipeLeftGesture:" destination="vur-9U-UwA" id="wlG-bd-VsN"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="896" y="320"/>
         </scene>
@@ -236,6 +271,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="color_wheel" width="2000" height="2000"/>
         <image name="settings" width="512" height="512"/>
         <image name="thermometer" width="768" height="1056"/>
     </resources>

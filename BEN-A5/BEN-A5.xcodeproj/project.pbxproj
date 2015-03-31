@@ -18,6 +18,8 @@
 		AD5E977E1AC371EE0014F627 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5E977D1AC371EE0014F627 /* MasterViewController.m */; };
 		AD5E97801AC376610014F627 /* UserDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD5E977F1AC376610014F627 /* UserDefaults.plist */; };
 		AD5E97831AC377D10014F627 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5E97821AC377D10014F627 /* SettingsViewController.m */; };
+		ADCDB9FC1ACAAC550095AC84 /* ColorPickerImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCDB9FB1ACAAC550095AC84 /* ColorPickerImageView.m */; };
+		ADCDB9FF1ACAB09F0095AC84 /* ColorPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCDB9FE1ACAB09F0095AC84 /* ColorPickerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,10 @@
 		AD5E977F1AC376610014F627 /* UserDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserDefaults.plist; sourceTree = "<group>"; };
 		AD5E97811AC377D10014F627 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		AD5E97821AC377D10014F627 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		ADCDB9FA1ACAAC550095AC84 /* ColorPickerImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPickerImageView.h; sourceTree = "<group>"; };
+		ADCDB9FB1ACAAC550095AC84 /* ColorPickerImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPickerImageView.m; sourceTree = "<group>"; };
+		ADCDB9FD1ACAB09F0095AC84 /* ColorPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPickerViewController.h; sourceTree = "<group>"; };
+		ADCDB9FE1ACAB09F0095AC84 /* ColorPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPickerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +118,7 @@
 		AD5E97511AC368350014F627 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				ADCDB9F91ACAABE90095AC84 /* ColorPicker */,
 				AD5E977B1AC368F40014F627 /* BLE */,
 				AD5E97521AC368350014F627 /* Info.plist */,
 				AD5E97531AC368350014F627 /* main.m */,
@@ -145,6 +152,17 @@
 				AD5E97791AC368EC0014F627 /* BLEDefines.h */,
 			);
 			name = BLE;
+			sourceTree = "<group>";
+		};
+		ADCDB9F91ACAABE90095AC84 /* ColorPicker */ = {
+			isa = PBXGroup;
+			children = (
+				ADCDB9FD1ACAB09F0095AC84 /* ColorPickerViewController.h */,
+				ADCDB9FE1ACAB09F0095AC84 /* ColorPickerViewController.m */,
+				ADCDB9FA1ACAAC550095AC84 /* ColorPickerImageView.h */,
+				ADCDB9FB1ACAAC550095AC84 /* ColorPickerImageView.m */,
+			);
+			name = ColorPicker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,6 +268,8 @@
 			files = (
 				AD5E975A1AC368350014F627 /* ViewController.m in Sources */,
 				AD5E97571AC368350014F627 /* AppDelegate.m in Sources */,
+				ADCDB9FF1ACAB09F0095AC84 /* ColorPickerViewController.m in Sources */,
+				ADCDB9FC1ACAAC550095AC84 /* ColorPickerImageView.m in Sources */,
 				AD5E977E1AC371EE0014F627 /* MasterViewController.m in Sources */,
 				AD5E97831AC377D10014F627 /* SettingsViewController.m in Sources */,
 				AD5E97541AC368350014F627 /* main.m in Sources */,

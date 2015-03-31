@@ -37,7 +37,29 @@
     
     NSData* myData = [NSData dataWithBytes:data length:length];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: myData, @"data",nil]] ;
+    
+    // get protocol id
+    NSData *msgProtocol = [myData subdataWithRange:NSMakeRange(0, 1)]; // make sure if data has n bytes
+    NSString *stringData = [msgProtocol description];
+    stringData = [stringData substringWithRange:NSMakeRange(1, [stringData length]-2)];
+    
+    unsigned protocolAsInt = 0;
+    NSScanner *scanner = [NSScanner scannerWithString: stringData];
+    [scanner scanHexInt:& protocolAsInt];
+    
+    
+    // get data bytes
+    NSData *msgData = [myData subdataWithRange:NSMakeRange(1, length-1)]; // make sure if data has n bytes
+    
+    // send notification for correct protocol
+    if(protocolAsInt == 1) {
+        
+    }
+    // available notifications
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Temp" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Color" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
     
 }
 #pragma mark - Application Deletate

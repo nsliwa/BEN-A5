@@ -12,6 +12,8 @@
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIProgressView *progressTemp;
+@property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
+@property (strong, nonatomic) UIProgressView *progressBar;
 
 @end
 
@@ -23,6 +25,18 @@
     return appDelegate.bleShield;
 }
 
+-(UIProgressView*) progressBar {
+    if(!_progressBar) {
+        _progressBar = [[UIProgressView alloc] initWithFrame:CGRectMake(-8, 202, 330,20)];
+        _progressBar.progress = 0.5f;
+        _progressBar.progressViewStyle = UIProgressViewStyleBar;
+        _progressBar.progressTintColor = [UIColor redColor];
+        _progressBar.transform = CGAffineTransformMakeRotation( M_PI * 1.5 );
+        [self.tempImageView addSubview:_progressBar];
+    }
+    return _progressBar;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -32,20 +46,23 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidDisconnect:) name:@"BLEDidDisconnect" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidUpdateRSSI:) name:@"BLEUpdatedRSSI" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData:) name:@"BLEReceievedData" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData_Temp:) name:@"BLEReceievedData_Temp" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData_Color:) name:@"BLEReceievedData_Color" object:nil];
     
     // setting up NSUserDefaults
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"UserDefaults" ofType:@"plist"]]];
     
-    self.progressTemp.transform= CGAffineTransformMakeRotation( M_PI * 0.5 );
+    self.progressBar.progress = [self temperatureToProgress:50];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    bool enableMotor = [defaults objectForKey:@"enableMotor"];
+    // additional setup
+
 }
 
 //setup auto rotation in code
@@ -92,6 +109,54 @@ NSTimer *rssiTimer;
         self.label.text = s;
     });
 }
+
+-(void) OnBLEDidReceiveData_Temp:(NSNotification *)notification
+{
+    float temp = [[[notification userInfo] objectForKey:@"data"] floatValue];
+//    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.progressBar.progress = [self temperatureToProgress:temp];
+    });
+}
+
+-(void) OnBLEDidReceiveData_Color:(NSNotification *)notification
+{
+    int color = (int)[[[notification userInfo] objectForKey:@"data"] integerValue];
+//    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+    UIColor* tint = [UIColor redColor];
+    
+    if(color == 1) {
+        tint = [UIColor yellowColor];
+    } else if(color == 2) { // yellow-orange: 255-215-0
+        tint = [UIColor colorWithRed:1.000 green:0.843 blue:0.000 alpha:1.000];
+    } else if(color == 3) {
+        tint = [UIColor orangeColor];
+    } else if(color == 4) { // orange-red: 255-127-80
+        tint = [UIColor colorWithRed:1.000 green:0.498 blue:0.314 alpha:1.000];
+    } else if(color == 5) {
+        tint = [UIColor redColor];
+    } else if(color == 6) { // red-purple: 176-48-96
+        tint = [UIColor colorWithRed:0.690 green:0.188 blue:0.376 alpha:1.000];
+    } else if(color == 7) {
+        tint = [UIColor purpleColor];
+    } else if(color == 8) { // purple-blue: 0-0-205
+        tint = [UIColor colorWithRed:0.000 green:0.000 blue:0.804 alpha:1.000];
+    } else if(color == 9) {
+        tint = [UIColor blueColor];
+    } else if(color == 10) { // blue-green: 65-105-225
+        tint = [UIColor colorWithRed:0.255 green:0.412 blue:0.882 alpha:1.000];
+    } else if(color == 11) {
+        tint = [UIColor greenColor];
+    } else if(color == 12) { // green-yellow: 173-255-47
+        tint = [UIColor colorWithRed:0.678 green:1.000 blue:0.184 alpha:1.000];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.progressBar.progressTintColor = tint;
+    });
+}
+
 
 
 //NEW did disconnect function
@@ -140,6 +205,11 @@ NSTimer *rssiTimer;
 
 -(IBAction)updateSettings:(UIStoryboardSegue*)unwindeSegue {
     
+}
+
+-(float)temperatureToProgress:(float)temperature
+{
+    return (temperature + 42) / 145;
 }
 
 @end

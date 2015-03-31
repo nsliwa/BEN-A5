@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ColorPickerImageView.h"
+
 @interface SettingsViewController : UIViewController
+
+- (void) pickedColor:(UIColor*)color;
 
 @end
