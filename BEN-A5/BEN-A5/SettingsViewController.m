@@ -13,6 +13,9 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchManualColor;
 @property (weak, nonatomic) IBOutlet UIImageView *imageColorWheel;
 
+//TODO:
+// get shared instance of bleShield to send messages
+
 @end
 
 @implementation SettingsViewController
@@ -21,7 +24,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-//    self.imageColorWheel.pickedColorDelegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -71,7 +73,7 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier  isEqual: @"UpdateSettings"]) {
-        // do stuff?
+        // need do stuff?
     }
 }
 
@@ -79,9 +81,9 @@
 - (IBAction)onTapGesture:(UITapGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
-        // handling code
         // TODO:
-        // get pixel color of tapped image position
+        // map tappedcolor to buckets 0-12
+        // send message to arduino to do something with tappedColor color
         
         NSLog(@"tap");
 
@@ -89,9 +91,8 @@
         NSLog(@"X location: %f", point.x);
         NSLog(@"Y Location: %f",point.y);
         
-        [self getPixelColor:self.imageColorWheel.image :point.x :point.y];
+        UIColor* tappedColor = [self getPixelColorAtPoint:self.imageColorWheel.image x:point.x y:point.y];
         
-//        [self getPixelColorAtLocation:point];
     }
     
 }
@@ -112,132 +113,29 @@
     NSLog(@"swipe left");
 }
 
-- (void) pickedColor:(UIColor*)color {
-    NSLog(@"color updated");
-}
 
-
-- (BOOL)getPixelColor: (UIImage *)image: (int) x :(int) y {
+// oringinal function found here:
+// http://stackoverflow.com/questions/3284185/get-pixel-color-of-uiimage
+- (UIColor*)getPixelColorAtPoint:(UIImage *)img x:(int)x y:(int)y {
     
-    CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
+    CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(img.CGImage));
     const UInt8* data = CFDataGetBytePtr(pixelData);
     
-    NSLog(@"width: %f | lenght: %f", image.size.width, image.size.height);
-    
-    int pixelInfo = ((image.size.width  * y) + x ) * 4; // The image is png
+    int pixelInfo = ((img.size.width  * y) + x ) * 4; // The image is png
     
     UInt8 red = data[pixelInfo];         // If you need this info, enable it
     UInt8 green = data[(pixelInfo + 1)]; // If you need this info, enable it
     UInt8 blue = data[pixelInfo + 2];    // If you need this info, enable it
     UInt8 alpha = data[pixelInfo + 3];     // I need only this info for my maze game
+    
     CFRelease(pixelData);
     
     UIColor* color = [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:alpha/255.0f]; // The pixel color info
     
-     NSLog(@"colors: RGB A %i %i %i  %i", red,green,blue,alpha);
-    
-    if (alpha) return YES;
-    else return NO;
-    
-}
-
-- (UIColor*) getPixelColorAtLocation:(CGPoint)point {
-    UIColor* color = nil;
-    CGImageRef inImage = self.imageColorWheel.image.CGImage;
-    // Create off screen bitmap context to draw the image into. Format ARGB is 4 bytes for each pixel: Alpa, Red, Green, Blue
-    CGContextRef cgctx = [self createARGBBitmapContextFromImage:inImage];
-    if (cgctx == NULL) { return nil; /* error */ }
-    
-    size_t w = CGImageGetWidth(inImage);
-    size_t h = CGImageGetHeight(inImage);
-    CGRect rect = {{0,0},{w,h}};
-    
-    // Draw the image to the bitmap context. Once we draw, the memory
-    // allocated for the context for rendering will then contain the
-    // raw image data in the specified color space.
-    CGContextDrawImage(cgctx, rect, inImage);
-    
-    // Now we can get a pointer to the image data associated with the bitmap
-    // context.
-    unsigned char* data = CGBitmapContextGetData (cgctx);
-    if (data != NULL) {
-        //offset locates the pixel in the data from x,y.
-        //4 for 4 bytes of data per pixel, w is width of one row of data.
-        int offset = 4*((w*round(point.y))+round(point.x));
-        int alpha =  data[offset];
-        int red = data[offset+1];
-        int green = data[offset+2];
-        int blue = data[offset+3];
-        NSLog(@"offset: %i colors: RGB A %i %i %i  %i",offset,red,green,blue,alpha);
-        color = [UIColor colorWithRed:(red/255.0f) green:(green/255.0f) blue:(blue/255.0f) alpha:(alpha/255.0f)];
-    }
-    
-    // When finished, release the context
-    CGContextRelease(cgctx); 
-    // Free image data memory for the context
-    if (data) { free(data); }
+    NSLog(@"width: %f | lenght: %f", img.size.width, img.size.height);
+    NSLog(@"colors: RGB A %i %i %i  %i", red,green,blue,alpha);
     
     return color;
+    
 }
-
-- (CGContextRef) createARGBBitmapContextFromImage:(CGImageRef) inImage {
-    
-    CGContextRef    context = NULL;
-    CGColorSpaceRef colorSpace;
-    void *          bitmapData;
-    int             bitmapByteCount;
-    int             bitmapBytesPerRow;
-    
-    // Get image width, height. We'll use the entire image.
-    size_t pixelsWide = CGImageGetWidth(inImage);
-    size_t pixelsHigh = CGImageGetHeight(inImage);
-    
-    // Declare the number of bytes per row. Each pixel in the bitmap in this
-    // example is represented by 4 bytes; 8 bits each of red, green, blue, and
-    // alpha.
-    bitmapBytesPerRow   = (int)(pixelsWide * 4);
-    bitmapByteCount     = (int)(bitmapBytesPerRow * pixelsHigh);
-    
-    // Use the generic RGB color space.
-    colorSpace = CGColorSpaceCreateDeviceRGB();
-    
-    if (colorSpace == NULL)
-    {
-        fprintf(stderr, "Error allocating color space\n");
-        return NULL;
-    }
-    
-    // Allocate memory for image data. This is the destination in memory
-    // where any drawing to the bitmap context will be rendered.
-    bitmapData = malloc( bitmapByteCount );
-    if (bitmapData == NULL)
-    {
-        fprintf (stderr, "Memory not allocated!");
-        CGColorSpaceRelease( colorSpace );
-        return NULL;
-    }
-    
-    // Create the bitmap context. We want pre-multiplied ARGB, 8-bits
-    // per component. Regardless of what the source image format is
-    // (CMYK, Grayscale, and so on) it will be converted over to the format
-    // specified here by CGBitmapContextCreate.
-    context = CGBitmapContextCreate (bitmapData,
-                                     pixelsWide,
-                                     pixelsHigh,
-                                     8,      // bits per component
-                                     bitmapBytesPerRow,
-                                     colorSpace,
-                                     (CGBitmapInfo)kCGImageAlphaPremultipliedFirst);
-    if (context == NULL)
-    {
-        free (bitmapData);
-        fprintf (stderr, "Context not created!");
-    }
-    
-    // Make sure and release colorspace before returning
-    CGColorSpaceRelease( colorSpace );
-    
-    return context;
-}
-
 @end

@@ -21,8 +21,11 @@
 
 -(BLE*)bleShield
 {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return appDelegate.bleShield;
+    if(!_bleShield) {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        _bleShield = appDelegate.bleShield;
+    }
+    return _bleShield;
 }
 
 -(UIProgressView*) progressBar {
@@ -47,14 +50,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidUpdateRSSI:) name:@"BLEUpdatedRSSI" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData:) name:@"BLEReceievedData" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData_Temp:) name:@"BLEReceievedData_Temp" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData_Color:) name:@"BLEReceievedData_Color" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData_Button:) name:@"BLEReceievedData_Button" object:nil];
     
-    // setting up NSUserDefaults
+    // register NSUserDefaults from plist
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"UserDefaults" ofType:@"plist"]]];
-    
-    self.progressBar.progress = [self temperatureToProgress:50];
 
 }
 
@@ -63,6 +64,8 @@
     
     // additional setup
 
+    
+    self.progressBar.progress = [self temperatureToProgress:50];
 }
 
 //setup auto rotation in code
@@ -120,6 +123,18 @@ NSTimer *rssiTimer;
     });
 }
 
+-(void) OnBLEDidReceiveData_Button:(NSNotification *)notification
+{
+    //TODO:
+    // programattically create UIImageView
+    // animate UIImageView
+    // delete UIImageView
+}
+
+
+//TODO:
+// change from notification to function that gets called on OnBLEDidReceiveData_Temp
+// calculate case '0' based on temp
 -(void) OnBLEDidReceiveData_Color:(NSNotification *)notification
 {
     int color = (int)[[[notification userInfo] objectForKey:@"data"] integerValue];
@@ -183,6 +198,11 @@ NSTimer *rssiTimer;
 
 
 
+// TODO:
+// split into 3 functions and move to SettingsVC
+// -> 1) to toggle motor on/off on switch toggle [build msgStr: 'M' byte + 0/1 byte for off/on]
+// -> 2) to send color on imgView tap [build msgStr: 'C' byte + 0-12 byte for color bucket]
+// -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
 #pragma mark - UI operations storyboard
 - (IBAction)BLEShieldSend:(id)sender
 {
@@ -209,7 +229,8 @@ NSTimer *rssiTimer;
 
 -(float)temperatureToProgress:(float)temperature
 {
-    return (temperature + 42) / 145;
+    float temp_f = (temperature * (9.0/5.0)) + 32.0;
+    return (temp_f + 42) / 145;
 }
 
 @end

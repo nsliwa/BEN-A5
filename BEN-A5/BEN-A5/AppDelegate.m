@@ -33,6 +33,8 @@
 }
 -(void) bleDidReceiveData:(unsigned char *) data length:(int) length
 {
+    NSArray *protocolIDs = @[@"T", @"B", @"M", @"E", @"C"];
+    
     NSLog(@"BLE ReceivedData");
     
     NSData* myData = [NSData dataWithBytes:data length:length];
@@ -40,21 +42,36 @@
     
     // get protocol id
     NSData *msgProtocol = [myData subdataWithRange:NSMakeRange(0, 1)]; // make sure if data has n bytes
-    NSString *stringData = [msgProtocol description];
-    stringData = [stringData substringWithRange:NSMakeRange(1, [stringData length]-2)];
-    
-    unsigned protocolAsInt = 0;
-    NSScanner *scanner = [NSScanner scannerWithString: stringData];
-    [scanner scanHexInt:& protocolAsInt];
-    
+    NSString *protocol = [[NSString alloc] initWithData:msgProtocol encoding:NSUTF8StringEncoding];
     
     // get data bytes
     NSData *msgData = [myData subdataWithRange:NSMakeRange(1, length-1)]; // make sure if data has n bytes
     
-    // send notification for correct protocol
-    if(protocolAsInt == 1) {
-        
+    int protocolID = [protocolIDs indexOfObject:protocol];
+    
+    switch (protocolID) {
+        case 0:
+            NSLog(@"temp");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Temp" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
+            break;
+        case 1:
+            NSLog(@"button");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
+            break;
+        case 2:
+            NSLog(@"motor - shouldn't get from A");
+            break;
+        case 3:
+            NSLog(@"effect - shouldn't get from A");
+            break;
+        case 4:
+            NSLog(@"color - shouldn't get from A");
+            break;
+        default:
+            NSLog(@"default - missing protocol");
+            break;
     }
+    
     // available notifications
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Temp" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Color" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
