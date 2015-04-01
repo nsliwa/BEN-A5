@@ -86,6 +86,14 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"UserDefaults" ofType:@"plist"]]];
+    
+    // Testing miser animations
+
+    
+    NSData* data = [NSData dataWithBytes:@"Bloodborne" length:255];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: data, @"data",nil]] ;
+
 
 }
 
@@ -159,6 +167,10 @@ NSTimer *rssiTimer;
         //TODO:
         // animate UIImageView
         // delete UIImageView
+        
+        [UIView animateWithDuration:1.0f delay:1.0f options:0
+                         animations:^{self.miserImageView.transform = CGAffineTransformMakeRotation(M_PI);}
+                         completion:^(BOOL finished){[self.miserImageView removeFromSuperview];}];
         
     }];
 }
