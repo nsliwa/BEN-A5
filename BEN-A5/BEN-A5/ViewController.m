@@ -168,8 +168,11 @@ NSTimer *rssiTimer;
         // animate UIImageView
         // delete UIImageView
         
-        [UIView animateWithDuration:1.0f delay:1.0f options:0
-                         animations:^{self.miserImageView.transform = CGAffineTransformMakeRotation(M_PI);}
+        CGAffineTransform rotate = CGAffineTransformMakeRotation(M_PI);
+        CGAffineTransform scale = CGAffineTransformMakeScale(0.01, 0.01);
+        
+        [UIView animateWithDuration:3.0f delay:0.5f options:0
+                         animations:^{self.miserImageView.transform = CGAffineTransformConcat(rotate, scale);}
                          completion:^(BOOL finished){[self.miserImageView removeFromSuperview];}];
         
     }];
