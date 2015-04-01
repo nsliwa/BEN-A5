@@ -90,6 +90,15 @@
     }
 }
 
+- (IBAction)didCancelView:(id)sender {
+    NSLog(@"did dismiss modal view");
+    [self.delegate didDismissModalView];
+}
+
+-(void)didDismissModalView:(id)sender{
+    [self.delegate didDismissModalView];
+}
+
 
 - (IBAction)onTapGesture:(UITapGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded)

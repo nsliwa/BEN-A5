@@ -91,6 +91,9 @@
                                 <state key="normal" title="Button" image="settings">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="onSettingsPressed:" destination="3NV-Ai-E5s" eventType="touchUpInside" id="3Ny-8d-ICZ"/>
+                                </connections>
                             </button>
                             <connections>
                                 <segue destination="vur-9U-UwA" kind="modal" identifier="updateSettings" id="BIA-iY-KDw"/>
@@ -108,7 +111,7 @@
         <!--Settings View Controller-->
         <scene sceneID="cIV-5g-TP3">
             <objects>
-                <viewController id="vur-9U-UwA" customClass="SettingsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="settingsViewModal" id="vur-9U-UwA" customClass="SettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ssH-vj-4wz"/>
                         <viewControllerLayoutGuide type="bottom" id="XM8-Ep-dNt"/>

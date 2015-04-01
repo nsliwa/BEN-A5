@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BLE.h"
+#import "SettingsViewController.h"
 
-@interface ViewController : UIViewController <NSURLSessionDelegate>
+@interface ViewController : UIViewController <NSURLSessionDelegate, ModalViewControllerDelegate>
 
 //@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 //@property (weak, nonatomic) IBOutlet UITextField *textField;

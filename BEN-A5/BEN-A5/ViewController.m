@@ -27,6 +27,8 @@
 
 @implementation ViewController
 
+SettingsViewController *addController;
+
 -(BLE*)bleShield
 {
     if(!_bleShield) {
@@ -94,6 +96,7 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: data, @"data",nil]] ;
 
+    addController.delegate = self;
 
 }
 
@@ -251,6 +254,26 @@ NSTimer *rssiTimer;
 -(IBAction)updateSettings:(UIStoryboardSegue*)unwindeSegue {
     
 }
+
+
+- (IBAction)onSettingsPressed:(id)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    addController = [storyboard instantiateViewControllerWithIdentifier:@"settingsViewModal"];
+    
+    
+    addController.delegate = self;
+    
+    [addController setModalPresentationStyle:UIModalPresentationFullScreen];
+    [self presentViewController:addController animated:YES completion:nil];
+    
+}
+
+-(void)didDismissModalView {
+    NSLog(@"settingView - did dissmis modal");
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 -(float)temperatureToProgress:(float)temperature
 {

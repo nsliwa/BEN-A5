@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "BLE.h"
 
+@protocol ModalViewControllerDelegate <NSObject>
+-(void)didDismissModalView;
+@end
 
 @interface SettingsViewController : UIViewController
 
+@property (nonatomic, weak) id<ModalViewControllerDelegate> delegate;
 @property (weak, nonatomic) BLE *bleShield;
 
 @end
