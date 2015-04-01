@@ -198,7 +198,13 @@
 // -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
 - (void)BLEShieldSend:(NSString*) protocolID data:(int)data
 {
-    NSString *payload = [NSString stringWithFormat:@"%d", data];
+    NSString *payload;
+    if(data < 10) {
+        payload = [NSString stringWithFormat:@"0%d", data];
+    }
+    else {
+        payload = [NSString stringWithFormat:@"%d", data];
+    }
     
     NSString *msg = [NSString stringWithFormat:@"%@%@", protocolID, payload];
     NSData* packet = [msg dataUsingEncoding:NSUTF8StringEncoding];
@@ -217,7 +223,8 @@
     
     
 //    NSData* protocolByte = [protocolID dataUsingEncoding:NSUTF8StringEncoding];
-//    NSData* payloadBytes = [NSKeyedArchiver archivedDataWithRootObject:data];
+//    NSData *payloadBytes = [NSData dataWithBytes:&data length:sizeof(data)];
+////    /*NSData* payloadBytes = [NSKeyedArchiver archivedDataWithRootObject:data];*/
 //    
 //    NSMutableData *packet = [NSMutableData data];
 //    [packet appendData:protocolByte];
