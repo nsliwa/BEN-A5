@@ -53,7 +53,7 @@
 
 -(float) ambientTemperature {
     if(!_ambientTemperature) {
-        _ambientTemperature = 30.0;
+        _ambientTemperature = 10.0;
     }
     
     return _ambientTemperature;
@@ -95,7 +95,19 @@
     // add miser subview to center of image
 //    self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
     
+    if ( self.ambientTemperature > [self queryCurrentWeather] ) {
+        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
+        NSLog(@"heat");
+        NSLog(@"ambient: %f | current: %f", self.ambientTemperature, [self queryCurrentWeather]);
+    }
+    else {
+        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
+        NSLog(@"snow");
+        NSLog(@"ambient: %f | current: %f", self.ambientTemperature, [self queryCurrentWeather]);
+    }
     
+    self.miserImageView.frame = CGRectMake( self.view.frame.size.width/2.0 - 330 /2.0 , self.view.frame.size.height/2.0 - 350/2.0, 330,350);
+    [self.view addSubview:self.miserImageView];
     
 
 
@@ -107,7 +119,7 @@
     // additional setup
 
     
-    self.progressBar.progress = [self temperatureToProgress:10];
+    self.progressBar.progress = [ self temperatureToProgress: self.ambientTemperature ];
 
 }
 
@@ -158,7 +170,9 @@ NSTimer *rssiTimer;
 
 -(void) OnBLEDidReceiveData_Temp:(NSNotification *)notification
 {
-    float temp = [[[notification userInfo] objectForKey:@"data"] floatValue];
+    NSData* d = [[notification userInfo] objectForKey:@"data"];
+    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+    float temp = [s floatValue];
 //    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -253,29 +267,29 @@ NSTimer *rssiTimer;
 
 
 
-// TODO:
-// split into 3 functions and move to SettingsVC
-// -> 1) to toggle motor on/off on switch toggle [build msgStr: 'M' byte + 0/1 byte for off/on]
-// -> 2) to send color on imgView tap [build msgStr: 'C' byte + 0-12 byte for color bucket]
-// -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
-#pragma mark - UI operations storyboard
-- (IBAction)BLEShieldSend:(id)sender
-{
-    
-    //Note: this function only needs a name change, the BLE writing does not change
-    NSString *s;
-    NSData *d;
-    
-    if (self.textField.text.length > 16)
-        s = [self.textField.text substringToIndex:16];
-    else
-        s = self.textField.text;
-    
-    s = [NSString stringWithFormat:@"%@\r\n", s];
-    d = [s dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [self.bleShield write:d];
-}
+//// TODO:
+//// split into 3 functions and move to SettingsVC
+//// -> 1) to toggle motor on/off on switch toggle [build msgStr: 'M' byte + 0/1 byte for off/on]
+//// -> 2) to send color on imgView tap [build msgStr: 'C' byte + 0-12 byte for color bucket]
+//// -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
+//#pragma mark - UI operations storyboard
+//- (IBAction)BLEShieldSend:(id)sender
+//{
+//    
+//    //Note: this function only needs a name change, the BLE writing does not change
+//    NSString *s;
+//    NSData *d;
+//    
+//    if (self.textField.text.length > 16)
+//        s = [self.textField.text substringToIndex:16];
+//    else
+//        s = self.textField.text;
+//    
+//    s = [NSString stringWithFormat:@"%@\r\n", s];
+//    d = [s dataUsingEncoding:NSUTF8StringEncoding];
+//    
+//    [self.bleShield write:d];
+//}
 
 
 -(IBAction)updateSettings:(UIStoryboardSegue*)unwindeSegue {

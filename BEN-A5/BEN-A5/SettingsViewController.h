@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BLE.h"
+
 
 @interface SettingsViewController : UIViewController
+
+@property (weak, nonatomic) BLE *bleShield;
 
 @end

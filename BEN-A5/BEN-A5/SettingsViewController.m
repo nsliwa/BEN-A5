@@ -7,6 +7,8 @@
 //
 
 #import "SettingsViewController.h"
+#import "AppDelegate.h"
+#import "BLE.h"
 
 @interface SettingsViewController ()
 @property (weak, nonatomic) IBOutlet UISwitch *switchVisualTemp;
@@ -19,6 +21,15 @@
 @end
 
 @implementation SettingsViewController
+
+-(BLE*)bleShield
+{
+    if(!_bleShield) {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        _bleShield = appDelegate.bleShield;
+    }
+    return _bleShield;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -137,5 +148,32 @@
     
     return color;
     
+}
+
+
+// TODO:
+// split into 3 functions and move to SettingsVC
+// -> 1) to toggle motor on/off on switch toggle [build msgStr: 'M' byte + 0/1 byte for off/on]
+// -> 2) to send color on imgView tap [build msgStr: 'C' byte + 0-12 byte for color bucket]
+// -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
+- (void)BLEShieldSend:(NSString*) protocolID data:(NSNumber*)data
+{
+    /*
+    NSData* protocolByte = [protocolID dataUsingEncoding:NSUTF8StringEncoding];
+    NSData* payloadBytes = [NSKeyedArchiver archivedDataWithRootObject:data];
+    
+    NSMutableData *packet = [NSMutableData protocolByte];
+    [packet appendData:payloadBytes];
+    
+    if (self.textField.text.length > 16)
+        s = [self.textField.text substringToIndex:16];
+    else
+        s = self.textField.text;
+    
+    s = [NSString stringWithFormat:@"%@\r\n", s];
+    d = [s dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [self.bleShield write:d];
+     */
 }
 @end
