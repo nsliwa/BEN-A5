@@ -53,7 +53,7 @@
 
 -(float) ambientTemperature {
     if(!_ambientTemperature) {
-        _ambientTemperature = 10.0;
+        _ambientTemperature = 30.0;
     }
     
     return _ambientTemperature;
@@ -95,19 +95,19 @@
     // add miser subview to center of image
 //    self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
     
-    if ( self.ambientTemperature > [self queryCurrentWeather] ) {
-        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
-        NSLog(@"heat");
-        NSLog(@"ambient: %f | current: %f", self.ambientTemperature, [self queryCurrentWeather]);
-    }
-    else {
-        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
-        NSLog(@"snow");
-        NSLog(@"ambient: %f | current: %f", self.ambientTemperature, [self queryCurrentWeather]);
-    }
+    [self queryCurrentWeather:^(float temp) {
+        if ( self.ambientTemperature > temp ) {
+            self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
+        }
+        else {
+            self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
+        }
+        
+        self.miserImageView.frame = CGRectMake( self.view.frame.size.width/2.0 - 330 /2.0 , self.view.frame.size.height/2.0 - 350/2.0, 330,350);
+        [self.view addSubview:self.miserImageView];
+    }];
     
-    self.miserImageView.frame = CGRectMake( self.view.frame.size.width/2.0 - 330 /2.0 , self.view.frame.size.height/2.0 - 350/2.0, 330,350);
-    [self.view addSubview:self.miserImageView];
+    
     
 
 
@@ -184,7 +184,12 @@ NSTimer *rssiTimer;
 -(void) OnBLEDidReceiveData_Button:(NSNotification *)notification
 {
     // programattically create UIImageView
-    if ( self.ambientTemperature > [self queryCurrentWeather] ) {
+    __block float outside_temp = 0.0;
+    [self queryCurrentWeather:^(float temp) {
+        outside_temp = temp;
+    }];
+    
+    if ( self.ambientTemperature > outside_temp ) {
         self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
     }
     else {
@@ -302,20 +307,19 @@ NSTimer *rssiTimer;
     return (temp_f + 42) / 145;
 }
 
--(float)queryCurrentWeather
+
+-(void)queryCurrentWeather:(void (^)(float temperature))completionHandler
 {
     NSString *urlAsString = [NSString stringWithFormat:@"http://api.wunderground.com/api/%@/conditions/q/%@/%@.json", kAPI_KEY, kState, kCity];
     
     NSURL *url = [[NSURL alloc] initWithString:urlAsString];
-    //float temperature = 0.0;
-    __block float temperature = 0.0;
+    
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         // do stuff to handle data
-        __block float temperature;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         
         NSDictionary *results = [json valueForKey:@"current_observation"];
-        temperature = [[results valueForKey:@"temp_c"] floatValue];
+        float temperature = [[results valueForKey:@"temp_c"] floatValue];
         
         //NSArray *icon = [results valueForKey:@"iconURL"];
         
@@ -323,11 +327,14 @@ NSTimer *rssiTimer;
         
         NSLog(@"Temperature %f", temperature);
         
+        if (completionHandler) {
+            completionHandler(temperature);
+        }
+        
     }];
     
     [dataTask resume];
     
-    return temperature;
     
 }
 
