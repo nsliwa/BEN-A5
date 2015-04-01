@@ -15,9 +15,6 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchManualColor;
 @property (weak, nonatomic) IBOutlet UIImageView *imageColorWheel;
 
-//TODO:
-// get shared instance of bleShield to send messages
-
 @end
 
 @implementation SettingsViewController
@@ -64,6 +61,8 @@
     
     //TODO:
     // send message to arduino to toggle motor on/off
+    
+    [self BLEShieldSend:@"C" data:[NSNumber numberWithBool:sender.on]];
 }
 - (IBAction)onToggleManualColor:(UISwitch*)sender {
     
@@ -78,6 +77,9 @@
     } else {
         self.imageColorWheel.userInteractionEnabled = false;
         self.imageColorWheel.hidden = true;
+        
+        [self BLEShieldSend:@"C" data:0];
+        
     }
     
 }
@@ -97,6 +99,23 @@
         // send message to arduino to do something with tappedColor color
         
         NSLog(@"tap");
+        
+        
+        NSArray *colorBuckets = @[
+                                  [UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:255/255.0f], // white - 255,255,255
+                                  [UIColor colorWithRed:255/255.0f green:0/255.0f blue:0/255.0f alpha:255/255.0f], // red - 255,0,0
+                                  [UIColor colorWithRed:255/255.0f green:102/255.0f blue:0/255.0f alpha:255/255.0f], // red-orange - 255,102,0
+                                  [UIColor colorWithRed:255/255.0f green:148/255.0f blue:0/255.0f alpha:255/255.0f], // orange -  255,148,0
+                                  [UIColor colorWithRed:254/255.0f green:197/255.0f blue:0/255.0f alpha:255/255.0f], // orange-yellow - 254,197,0
+                                  [UIColor colorWithRed:255/255.0f green:255/255.0f blue:0/255.0f alpha:255/255.0f], // yellow - 255,255,0
+                                  [UIColor colorWithRed:140/255.0f green:199/255.0f blue:0/255.0f alpha:255/255.0f], // yellow-green - 140,199,0
+                                  [UIColor colorWithRed:15/255.0f green:173/255.0f blue:0/255.0f alpha:255/255.0f], // green - 15,173,0
+                                  [UIColor colorWithRed:0/255.0f green:163/255.0f blue:199/255.0f alpha:255/255.0f], // green-blue - 0,163,199
+                                  [UIColor colorWithRed:0/255.0f green:100/255.0f blue:181/255.0f alpha:255/255.0f], // blue - 0,100,101
+                                  [UIColor colorWithRed:0/255.0f green:16/255.0f blue:165/255.0f alpha:255/255.0f], // blue-purple - 0,16,165
+                                  [UIColor colorWithRed:99/255.0f green:0/255.0f blue:165/255.0f alpha:255/255.0f], // purple - 99,0,165
+                                  [UIColor colorWithRed:197/255.0f green:0/255.0f blue:124/255.0f alpha:255/255.0f], // purple-red - 197,0,124
+                                  ];
 
         CGPoint point = [sender locationInView:self.imageColorWheel];
         NSLog(@"X location: %f", point.x);
@@ -104,14 +123,33 @@
         
         UIColor* tappedColor = [self getPixelColorAtPoint:self.imageColorWheel.image x:point.x y:point.y];
         
+        int colorBucket = (int)[colorBuckets indexOfObject:tappedColor];
+        if( colorBucket == -1 ) {
+            colorBucket = 0;
+        }
+        
+        NSLog(@"bucket: %d", colorBucket);
+        
+        [ self BLEShieldSend:@"C" data:[NSNumber numberWithInt:colorBucket] ];
     }
     
 }
 
+- (IBAction)onDownSwipeGesture:(UISwipeGestureRecognizer *)sender {
+    
+    //TODO:
+    // send message to arduino to do no color effects
+    
+    [self BLEShieldSend:@"E" data:@0];
+    
+    NSLog(@"swipe down");
+}
 
 - (IBAction)onSwipeRightGesture:(UISwipeGestureRecognizer *)sender {
     //TODO:
     // send message to arduino to go cw around color wheel
+    
+    [self BLEShieldSend:@"E" data:@2];
     
     NSLog(@"swipe right");
 }
@@ -120,6 +158,8 @@
     
     //TODO:
     // send message to arduino to go ccw around color wheel
+    
+    [self BLEShieldSend:@"E" data:@1];
     
     NSLog(@"swipe left");
 }
@@ -158,22 +198,21 @@
 // -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
 - (void)BLEShieldSend:(NSString*) protocolID data:(NSNumber*)data
 {
-    /*
+    
     NSData* protocolByte = [protocolID dataUsingEncoding:NSUTF8StringEncoding];
     NSData* payloadBytes = [NSKeyedArchiver archivedDataWithRootObject:data];
     
-    NSMutableData *packet = [NSMutableData protocolByte];
+    NSMutableData *packet = [NSMutableData data];
+    [packet appendData:protocolByte];
     [packet appendData:payloadBytes];
     
-    if (self.textField.text.length > 16)
-        s = [self.textField.text substringToIndex:16];
-    else
-        s = self.textField.text;
     
-    s = [NSString stringWithFormat:@"%@\r\n", s];
-    d = [s dataUsingEncoding:NSUTF8StringEncoding];
+    if([self.bleShield isConnected]) {
+        [self.bleShield write: packet];
+    }
+    else {
+        NSLog(@"No device connected");
+    }
     
-    [self.bleShield write:d];
-     */
 }
 @end

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3NV-Ai-E5s">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vur-9U-UwA">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Root View Controller-->
@@ -116,8 +117,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Visual Temperature" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Myd-0M-Fdd">
+                                <rect key="frame" x="16" y="78" width="203" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Manual Light Control" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovT-Dt-RHj">
+                                <rect key="frame" x="16" y="124" width="161" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mgq-7O-gsG">
+                                <rect key="frame" x="255" y="73" width="51" height="31"/>
+                                <connections>
+                                    <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="ch1-No-AJv"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-q3-a8B">
+                                <rect key="frame" x="255" y="119" width="51" height="31"/>
+                                <connections>
+                                    <action selector="onToggleManualColor:" destination="vur-9U-UwA" eventType="valueChanged" id="QfG-8X-C37"/>
+                                    <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="g0j-OM-Kaf"/>
+                                </connections>
+                            </switch>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="color_wheel_300x300" translatesAutoresizingMaskIntoConstraints="NO" id="LHz-sH-z5n">
+                                <rect key="frame" x="10" y="158" width="300" height="300"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="W1s-0H-K0m"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="kdF-LJ-vrg" appends="YES" id="HVS-87-yTQ"/>
+                                    <outletCollection property="gestureRecognizers" destination="wDE-13-tct" appends="YES" id="7Hp-zl-MPs"/>
+                                    <outletCollection property="gestureRecognizers" destination="Ra5-Np-0e9" appends="YES" id="OfN-Zq-wZX"/>
+                                    <outletCollection property="gestureRecognizers" destination="n1d-Kv-E5s" appends="YES" id="MZO-68-ZVD"/>
+                                </connections>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zK5-yQ-Q3k">
-                                <rect key="frame" x="145" y="456" width="30" height="30"/>
+                                <rect key="frame" x="268" y="28" width="30" height="30"/>
                                 <state key="normal" title="OK">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -125,48 +164,21 @@
                                     <segue destination="CWh-Q2-woD" kind="unwind" unwindAction="updateSettings:" id="MEa-8A-XIq"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enable Visual Temperature" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Myd-0M-Fdd">
-                                <rect key="frame" x="16" y="28" width="203" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Manual Light Control" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovT-Dt-RHj">
-                                <rect key="frame" x="16" y="74" width="161" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mgq-7O-gsG">
-                                <rect key="frame" x="255" y="23" width="51" height="31"/>
-                                <connections>
-                                    <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="ch1-No-AJv"/>
-                                </connections>
-                            </switch>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-q3-a8B">
-                                <rect key="frame" x="255" y="69" width="51" height="31"/>
-                                <connections>
-                                    <action selector="onToggleManualColor:" destination="vur-9U-UwA" eventType="valueChanged" id="QfG-8X-C37"/>
-                                    <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="g0j-OM-Kaf"/>
-                                </connections>
-                            </switch>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="color_wheel_300x300" translatesAutoresizingMaskIntoConstraints="NO" id="LHz-sH-z5n">
-                                <rect key="frame" x="10" y="108" width="300" height="300"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="kdF-LJ-vrg" appends="YES" id="HVS-87-yTQ"/>
-                                    <outletCollection property="gestureRecognizers" destination="wDE-13-tct" appends="YES" id="7Hp-zl-MPs"/>
-                                    <outletCollection property="gestureRecognizers" destination="Ra5-Np-0e9" appends="YES" id="OfN-Zq-wZX"/>
-                                </connections>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="LHz-sH-z5n" firstAttribute="top" secondItem="Uqa-q3-a8B" secondAttribute="bottom" constant="8" symbolic="YES" id="Gi4-xH-F7Y"/>
-                            <constraint firstItem="zK5-yQ-Q3k" firstAttribute="top" secondItem="LHz-sH-z5n" secondAttribute="bottom" constant="48" id="Vhk-T7-MQE"/>
-                            <constraint firstItem="LHz-sH-z5n" firstAttribute="centerX" secondItem="zK5-yQ-Q3k" secondAttribute="centerX" id="cZi-Qn-Uh3"/>
-                            <constraint firstItem="LHz-sH-z5n" firstAttribute="top" secondItem="DKF-rG-Zvf" secondAttribute="top" constant="108" id="mJ4-PF-Wtw"/>
-                            <constraint firstItem="LHz-sH-z5n" firstAttribute="centerX" secondItem="DKF-rG-Zvf" secondAttribute="centerX" id="rTG-Hj-Y3u"/>
+                            <constraint firstItem="Myd-0M-Fdd" firstAttribute="centerY" secondItem="Mgq-7O-gsG" secondAttribute="centerY" id="0UF-zD-okg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="zK5-yQ-Q3k" secondAttribute="trailing" constant="6" id="5YS-HU-Hla"/>
+                            <constraint firstItem="ovT-Dt-RHj" firstAttribute="centerY" secondItem="Uqa-q3-a8B" secondAttribute="centerY" id="CDP-Vf-sLP"/>
+                            <constraint firstItem="Mgq-7O-gsG" firstAttribute="leading" secondItem="Uqa-q3-a8B" secondAttribute="leading" id="Khb-MA-raE"/>
+                            <constraint firstItem="Uqa-q3-a8B" firstAttribute="top" secondItem="Mgq-7O-gsG" secondAttribute="bottom" constant="15" id="Qb6-E1-aYl"/>
+                            <constraint firstItem="ovT-Dt-RHj" firstAttribute="leading" secondItem="Myd-0M-Fdd" secondAttribute="leading" id="bqS-P6-rTG"/>
+                            <constraint firstItem="Mgq-7O-gsG" firstAttribute="top" secondItem="zK5-yQ-Q3k" secondAttribute="bottom" constant="15" id="ejO-kH-yUs"/>
+                            <constraint firstItem="LHz-sH-z5n" firstAttribute="centerX" secondItem="DKF-rG-Zvf" secondAttribute="centerX" id="g15-QC-JqJ"/>
+                            <constraint firstItem="LHz-sH-z5n" firstAttribute="top" secondItem="Uqa-q3-a8B" secondAttribute="bottom" constant="8" symbolic="YES" id="lHn-cP-92P"/>
+                            <constraint firstItem="Myd-0M-Fdd" firstAttribute="leading" secondItem="DKF-rG-Zvf" secondAttribute="leadingMargin" id="niW-nk-49i"/>
+                            <constraint firstItem="zK5-yQ-Q3k" firstAttribute="top" secondItem="ssH-vj-4wz" secondAttribute="bottom" constant="8" symbolic="YES" id="oKv-GS-RCi"/>
+                            <constraint firstItem="Uqa-q3-a8B" firstAttribute="trailing" secondItem="DKF-rG-Zvf" secondAttribute="trailingMargin" id="wqT-BW-VqJ"/>
                         </constraints>
                     </view>
                     <connections>
@@ -192,8 +204,13 @@
                         <action selector="onSwipeLeftGesture:" destination="vur-9U-UwA" id="wlG-bd-VsN"/>
                     </connections>
                 </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="down" id="n1d-Kv-E5s">
+                    <connections>
+                        <action selector="onDownSwipeGesture:" destination="vur-9U-UwA" id="A1E-Wx-U1v"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="896" y="320"/>
+            <point key="canvasLocation" x="1069" y="300"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="AiI-w1-O91">

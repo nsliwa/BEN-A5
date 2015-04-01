@@ -15,7 +15,6 @@
 #define kCity @"University_Park"
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet UIProgressView *progressTemp;
 @property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
 @property (strong, nonatomic) UIImageView *miserImageView;
 @property (strong, nonatomic) UIProgressView *progressBar;
@@ -87,19 +86,6 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"UserDefaults" ofType:@"plist"]]];
-    
-    /*self.tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Heatmiser_normal.png"]];
-    [self.tempImageView setFrame:CGRectMake(0, 90, 30, 30)];
-    [self.view addSubview:self.tempImageView];*/
-    
-    // add miser subview to center of image
-//    self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
-    
-    
-    
-    
-    
-
 
 }
 
@@ -108,7 +94,7 @@
     
     // additional setup
 
-    
+    // init progress bar
     self.progressBar.progress = [ self temperatureToProgress: self.ambientTemperature ];
 
 }
@@ -131,20 +117,7 @@ NSTimer *rssiTimer;
 {
     NSNumber* d = [[notification userInfo] objectForKey:@"RSSI"];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.labelRSSI.text =  d.stringValue;
-    });
-}
-
-// OLD FUNCITON: parse the received data using BLEDelegate protocol
--(void) bleDidReceiveData:(unsigned char *)data length:(int)length
-{
-    NSData *d = [NSData dataWithBytes:data length:length];
-    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.label.text = s;
-    });
+    NSLog(@"RSSI: %@", d.stringValue);
 }
 
 // NEW FUNCTION EXAMPLE: parse the received data from NSNotification
@@ -153,9 +126,7 @@ NSTimer *rssiTimer;
     NSData* d = [[notification userInfo] objectForKey:@"data"];
     NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.label.text = s;
-    });
+    NSLog(@"data received: %@", s);
 }
 
 -(void) OnBLEDidReceiveData_Temp:(NSNotification *)notification
@@ -192,7 +163,7 @@ NSTimer *rssiTimer;
     }];
 }
 
-
+/*
 //TODO:
 // change from notification to function that gets called on OnBLEDidReceiveData_Temp
 // calculate case '0' based on temp
@@ -232,7 +203,7 @@ NSTimer *rssiTimer;
         self.progressBar.progressTintColor = tint;
     });
 }
-
+*/
 
 
 //NEW did disconnect function
@@ -245,43 +216,15 @@ NSTimer *rssiTimer;
 -(void) OnBLEDidConnect:(NSNotification *)notification
 {
     //CHANGE 5.a: Remove all usage of the connect button and remove from storyboard
-    [self.spinner stopAnimating];
+//    [self.spinner stopAnimating];
     
     NSString *deviceName =[notification.userInfo objectForKey:@"deviceName"];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.labelPeripheral.text = deviceName;
-    });
+    NSLog(@"Device name: %@", deviceName);
     
     // Schedule to read RSSI every 1 sec.
     rssiTimer = [NSTimer scheduledTimerWithTimeInterval:(float)1.0 target:self selector:@selector(readRSSITimer:) userInfo:nil repeats:YES];
 }
-
-
-
-//// TODO:
-//// split into 3 functions and move to SettingsVC
-//// -> 1) to toggle motor on/off on switch toggle [build msgStr: 'M' byte + 0/1 byte for off/on]
-//// -> 2) to send color on imgView tap [build msgStr: 'C' byte + 0-12 byte for color bucket]
-//// -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
-//#pragma mark - UI operations storyboard
-//- (IBAction)BLEShieldSend:(id)sender
-//{
-//    
-//    //Note: this function only needs a name change, the BLE writing does not change
-//    NSString *s;
-//    NSData *d;
-//    
-//    if (self.textField.text.length > 16)
-//        s = [self.textField.text substringToIndex:16];
-//    else
-//        s = self.textField.text;
-//    
-//    s = [NSString stringWithFormat:@"%@\r\n", s];
-//    d = [s dataUsingEncoding:NSUTF8StringEncoding];
-//    
-//    [self.bleShield write:d];
-//}
 
 
 -(IBAction)updateSettings:(UIStoryboardSegue*)unwindeSegue {
@@ -307,10 +250,6 @@ NSTimer *rssiTimer;
         
         NSDictionary *results = [json valueForKey:@"current_observation"];
         float temperature = [[results valueForKey:@"temp_c"] floatValue];
-        
-        //NSArray *icon = [results valueForKey:@"iconURL"];
-        
-        //NSLog(@"params: %@, %f", icon, icon.count);
         
         NSLog(@"Temperature %f", temperature);
         
