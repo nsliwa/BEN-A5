@@ -2,4 +2,52 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BEN-A5/ViewController.m"
+            timestampString = "449544955.001303"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "progressTemp"
+            landmarkType = "19">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ViewController progressTemp]"
+                  moduleName = "BEN-A5"
+                  urlString = "file:///Users/nicolesliwa/Documents/SMU/10-Spring_2015/7323-Mobile_Aps/Assignments/TeamB.E.N.%20-%20A5/BEN-A5/BEN-A5/ViewController.m"
+                  timestampString = "449541544.013483"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ViewController setProgressTemp:]"
+                  moduleName = "BEN-A5"
+                  urlString = "file:///Users/nicolesliwa/Documents/SMU/10-Spring_2015/7323-Mobile_Aps/Assignments/TeamB.E.N.%20-%20A5/BEN-A5/BEN-A5/ViewController.m"
+                  timestampString = "449541544.060075"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

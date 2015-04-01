@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BLE.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <NSURLSessionDelegate>
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (weak, nonatomic) IBOutlet UITextField *textField;

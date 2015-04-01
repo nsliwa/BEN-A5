@@ -10,11 +10,19 @@
 #import "AppDelegate.h"
 #import "BLE.h"
 
+#define kAPI_KEY @"7808cb7fa5475ae0"
+#define kState @"TX"
+#define kCity @"University_Park"
+
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIProgressView *progressTemp;
 @property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
-@property (weak, nonatomic) UIImageView *miserImageView;
+@property (strong, nonatomic) UIImageView *miserImageView;
 @property (strong, nonatomic) UIProgressView *progressBar;
+
+@property (nonatomic) float ambientTemperature;
+
+@property (strong, nonatomic) NSURLSession *session;
 
 @end
 
@@ -27,6 +35,28 @@
         _bleShield = appDelegate.bleShield;
     }
     return _bleShield;
+}
+
+-(NSURLSession*) session {
+    if(!_session) {
+        
+        NSURLSessionConfiguration* sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+        sessionConfig.timeoutIntervalForRequest = 5.0;
+        sessionConfig.timeoutIntervalForResource = 8.0;
+        sessionConfig.HTTPMaximumConnectionsPerHost = 1;
+        
+        _session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+        
+    }
+    return _session;
+}
+
+-(float) ambientTemperature {
+    if(!_ambientTemperature) {
+        _ambientTemperature = 30.0;
+    }
+    
+    return _ambientTemperature;
 }
 
 -(UIProgressView*) progressBar {
@@ -62,9 +92,11 @@
     [self.tempImageView setFrame:CGRectMake(0, 90, 30, 30)];
     [self.view addSubview:self.tempImageView];*/
     
-    self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Heatmiser_normal.png"]];
-    self.miserImageView.frame = CGRectMake(-8, 202, 330,20);
-    [self.view addSubview:self.miserImageView];
+    // add miser subview to center of image
+//    self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
+    
+    
+    
 
 
 }
@@ -75,7 +107,7 @@
     // additional setup
 
     
-    self.progressBar.progress = [self temperatureToProgress:50];
+    self.progressBar.progress = [self temperatureToProgress:10];
 
 }
 
@@ -130,14 +162,26 @@ NSTimer *rssiTimer;
 //    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.progressBar.progress = [self temperatureToProgress:temp];
+        self.ambientTemperature = [self temperatureToProgress:temp];
+        self.progressBar.progress = self.ambientTemperature;
     });
 }
 
 -(void) OnBLEDidReceiveData_Button:(NSNotification *)notification
 {
-    //TODO:
     // programattically create UIImageView
+    if ( self.ambientTemperature > [self queryCurrentWeather] ) {
+        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
+    }
+    else {
+        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
+    }
+    
+    self.miserImageView.frame = CGRectMake( self.view.frame.size.width/2.0 - 330 /2.0 , self.view.frame.size.height/2.0 - 350/2.0, 330,350);
+    [self.view addSubview:self.miserImageView];
+    
+    
+    //TODO:
     // animate UIImageView
     // delete UIImageView
 }
@@ -242,6 +286,35 @@ NSTimer *rssiTimer;
 {
     float temp_f = (temperature * (9.0/5.0)) + 32.0;
     return (temp_f + 42) / 145;
+}
+
+-(float)queryCurrentWeather
+{
+    NSString *urlAsString = [NSString stringWithFormat:@"http://api.wunderground.com/api/%@/conditions/q/%@/%@.json", kAPI_KEY, kState, kCity];
+    
+    NSURL *url = [[NSURL alloc] initWithString:urlAsString];
+    //float temperature = 0.0;
+    __block float temperature = 0.0;
+    NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        // do stuff to handle data
+        __block float temperature;
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        
+        NSDictionary *results = [json valueForKey:@"current_observation"];
+        temperature = [[results valueForKey:@"temp_c"] floatValue];
+        
+        //NSArray *icon = [results valueForKey:@"iconURL"];
+        
+        //NSLog(@"params: %@, %f", icon, icon.count);
+        
+        NSLog(@"Temperature %f", temperature);
+        
+    }];
+    
+    [dataTask resume];
+    
+    return temperature;
+    
 }
 
 @end
