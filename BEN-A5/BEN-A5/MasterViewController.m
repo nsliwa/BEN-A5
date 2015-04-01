@@ -13,7 +13,7 @@
 
 @interface MasterViewController ()
 
-@property (strong, nonatomic, readonly) BLE* bleShield;
+@property (strong, nonatomic) BLE* bleShield;
 
 @end
 
@@ -21,8 +21,11 @@
 
 -(BLE*)bleShield
 {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return appDelegate.bleShield;
+    if(!_bleShield) {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        _bleShield = appDelegate.bleShield;
+    }
+    return _bleShield;
 }
 
 - (void)viewDidLoad {

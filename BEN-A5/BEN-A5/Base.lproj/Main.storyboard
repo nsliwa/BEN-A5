@@ -139,7 +139,6 @@
                                 <rect key="frame" x="255" y="119" width="51" height="31"/>
                                 <connections>
                                     <action selector="onToggleManualColor:" destination="vur-9U-UwA" eventType="valueChanged" id="QfG-8X-C37"/>
-                                    <action selector="onToggleVisualTemp:" destination="vur-9U-UwA" eventType="valueChanged" id="g0j-OM-Kaf"/>
                                 </connections>
                             </switch>
                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="color_wheel_300x300" translatesAutoresizingMaskIntoConstraints="NO" id="LHz-sH-z5n">

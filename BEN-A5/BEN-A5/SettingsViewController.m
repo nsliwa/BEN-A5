@@ -62,7 +62,7 @@
     //TODO:
     // send message to arduino to toggle motor on/off
     
-    [self BLEShieldSend:@"C" data:[NSNumber numberWithBool:sender.on]];
+    [self BLEShieldSend:@"M" data:sender.on];
 }
 - (IBAction)onToggleManualColor:(UISwitch*)sender {
     
@@ -130,7 +130,7 @@
         
         NSLog(@"bucket: %d", colorBucket);
         
-        [ self BLEShieldSend:@"C" data:[NSNumber numberWithInt:colorBucket] ];
+        [ self BLEShieldSend:@"C" data:colorBucket ];
     }
     
 }
@@ -140,7 +140,7 @@
     //TODO:
     // send message to arduino to do no color effects
     
-    [self BLEShieldSend:@"E" data:@0];
+    [self BLEShieldSend:@"E" data:0];
     
     NSLog(@"swipe down");
 }
@@ -149,7 +149,7 @@
     //TODO:
     // send message to arduino to go cw around color wheel
     
-    [self BLEShieldSend:@"E" data:@2];
+    [self BLEShieldSend:@"E" data:2];
     
     NSLog(@"swipe right");
 }
@@ -159,7 +159,7 @@
     //TODO:
     // send message to arduino to go ccw around color wheel
     
-    [self BLEShieldSend:@"E" data:@1];
+    [self BLEShieldSend:@"E" data:1];
     
     NSLog(@"swipe left");
 }
@@ -196,15 +196,37 @@
 // -> 1) to toggle motor on/off on switch toggle [build msgStr: 'M' byte + 0/1 byte for off/on]
 // -> 2) to send color on imgView tap [build msgStr: 'C' byte + 0-12 byte for color bucket]
 // -> 3) to send effect on imgView swipe [build msgStr: 'E' byte + 0-2 for none/left/right light effect]
-- (void)BLEShieldSend:(NSString*) protocolID data:(NSNumber*)data
+- (void)BLEShieldSend:(NSString*) protocolID data:(int)data
 {
+    NSString *payload = [NSString stringWithFormat:@"%d", data];
     
-    NSData* protocolByte = [protocolID dataUsingEncoding:NSUTF8StringEncoding];
-    NSData* payloadBytes = [NSKeyedArchiver archivedDataWithRootObject:data];
+    NSString *msg = [NSString stringWithFormat:@"%@%@", protocolID, payload];
+    NSData* packet = [msg dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSMutableData *packet = [NSMutableData data];
-    [packet appendData:protocolByte];
-    [packet appendData:payloadBytes];
+//    NSUInteger msgSize = 3;
+//    unsigned char *msgBuffer = (unsigned char *)calloc(msgSize, sizeof(unsigned char));
+//    msgBuffer[0] = protocolID;
+//    msgBuffer[1] = (char) data;
+//    msgBuffer[2] = '\n';
+//    
+//    NSData* packet = [NSData dataWithBytes:(const void *)msgBuffer length:sizeof(unsigned char)*msgSize];
+//    
+//    NSLog(@"data: %d, %c | buffer: %s", data, (char)data, msgBuffer);
+//    
+//    free(msgBuffer);
+    
+    
+//    NSData* protocolByte = [protocolID dataUsingEncoding:NSUTF8StringEncoding];
+//    NSData* payloadBytes = [NSKeyedArchiver archivedDataWithRootObject:data];
+//    
+//    NSMutableData *packet = [NSMutableData data];
+//    [packet appendData:protocolByte];
+//    [packet appendData:payloadBytes];
+    
+    
+    NSString* myString;
+    myString = [[NSString alloc] initWithData:packet encoding:NSASCIIStringEncoding];
+    NSLog(@"message to send: %@", myString);
     
     
     if([self.bleShield isConnected]) {

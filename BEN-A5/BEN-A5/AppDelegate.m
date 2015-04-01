@@ -47,16 +47,21 @@
     // get data bytes
     NSData *msgData = [myData subdataWithRange:NSMakeRange(1, length-1)]; // make sure if data has n bytes
     
-    int protocolID = [protocolIDs indexOfObject:protocol];
+    NSString* myString;
+    myString = [[NSString alloc] initWithData:msgData encoding:NSASCIIStringEncoding];
+     NSLog(@"message: %@", myString);
+    
+    int protocolID = (int)[protocolIDs indexOfObject:protocol];
     
     switch (protocolID) {
         case 0:
-            NSLog(@"temp");
             [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Temp" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
+            NSLog(@"temp");
             break;
         case 1:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self] ;
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
             NSLog(@"button");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
             break;
         case 2:
             NSLog(@"motor - shouldn't get from A");
@@ -76,7 +81,7 @@
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Temp" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Color" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: msgData, @"data",nil]] ;
     
 }
 #pragma mark - Application Deletate
@@ -108,6 +113,14 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+//    
+//    unsigned char* d = "T950";
+//    [self bleDidReceiveData:d length:5];
+//    
+//    unsigned char* da = "B1";
+//    [self bleDidReceiveData:da length:2];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEDidDisconnect" object:self] ;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

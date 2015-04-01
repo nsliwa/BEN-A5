@@ -78,9 +78,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidConnect:) name:@"BLEDidConnect" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidDisconnect:) name:@"BLEDidDisconnect" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidUpdateRSSI:) name:@"BLEUpdatedRSSI" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData:) name:@"BLEReceievedData" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData_Temp:) name:@"BLEReceievedData_Temp" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData_Button:) name:@"BLEReceievedData_Button" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidReceiveData:) name:@"BLEReceievedData" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidReceiveData_Temp:) name:@"BLEReceievedData_Temp" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidReceiveData_Button:) name:@"BLEReceievedData_Button" object:nil];
     
     // register NSUserDefaults from plist
     
@@ -142,16 +142,21 @@ NSTimer *rssiTimer;
     NSData* d = [[notification userInfo] objectForKey:@"data"];
     NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
     float temp = [s floatValue];
+    NSLog(@"Ambient temp: %f", temp);
 //    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.ambientTemperature = [self temperatureToProgress:temp];
         self.progressBar.progress = self.ambientTemperature;
+        
+        NSLog(@"Ambient temp: %f", self.ambientTemperature);
     });
 }
 
 -(void) OnBLEDidReceiveData_Button:(NSNotification *)notification
 {
+    
+    NSLog(@"miser animation");
     // programattically create UIImageView
     [self queryCurrentWeather:^(float temp) {
         if ( self.ambientTemperature > temp ) {
@@ -225,6 +230,7 @@ NSTimer *rssiTimer;
 -(void) OnBLEDidDisconnect:(NSNotification *)notification
 {
     [rssiTimer invalidate];
+    NSLog(@"Disconnected");
 }
 
 //NEW did connect function
