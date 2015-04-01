@@ -53,7 +53,7 @@
 
 -(float) ambientTemperature {
     if(!_ambientTemperature) {
-        _ambientTemperature = 30.0;
+        _ambientTemperature = 0.0;
     }
     
     return _ambientTemperature;
@@ -95,17 +95,7 @@
     // add miser subview to center of image
 //    self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
     
-    [self queryCurrentWeather:^(float temp) {
-        if ( self.ambientTemperature > temp ) {
-            self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
-        }
-        else {
-            self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
-        }
-        
-        self.miserImageView.frame = CGRectMake( self.view.frame.size.width/2.0 - 330 /2.0 , self.view.frame.size.height/2.0 - 350/2.0, 330,350);
-        [self.view addSubview:self.miserImageView];
-    }];
+    
     
     
     
@@ -184,25 +174,22 @@ NSTimer *rssiTimer;
 -(void) OnBLEDidReceiveData_Button:(NSNotification *)notification
 {
     // programattically create UIImageView
-    __block float outside_temp = 0.0;
     [self queryCurrentWeather:^(float temp) {
-        outside_temp = temp;
+        if ( self.ambientTemperature > temp ) {
+            self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
+        }
+        else {
+            self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
+        }
+        
+        self.miserImageView.frame = CGRectMake( self.view.frame.size.width/2.0 - 330 /2.0 , self.view.frame.size.height/2.0 - 350/2.0, 330,350);
+        [self.view addSubview:self.miserImageView];
+        
+        //TODO:
+        // animate UIImageView
+        // delete UIImageView
+        
     }];
-    
-    if ( self.ambientTemperature > outside_temp ) {
-        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heat_miser"]];
-    }
-    else {
-        self.miserImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snow_miser"]];
-    }
-    
-    self.miserImageView.frame = CGRectMake( self.view.frame.size.width/2.0 - 330 /2.0 , self.view.frame.size.height/2.0 - 350/2.0, 330,350);
-    [self.view addSubview:self.miserImageView];
-    
-    
-    //TODO:
-    // animate UIImageView
-    // delete UIImageView
 }
 
 
