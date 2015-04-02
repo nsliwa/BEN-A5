@@ -40,6 +40,12 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
+}
+
 // Scan for devices for 3 seconds, then populate table with UUID and peripheral name
 // To connect, click on device name
 -(void)scanForDevices
@@ -78,24 +84,37 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [self.bleShield.peripherals count];;
+    if(section==0){
+        return [self.bleShield.peripherals count];
+    }
+    else {
+        return 1;
+    }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BLECell" forIndexPath:indexPath];
     
-    
-    CBPeripheral* aPeripheral = [self.bleShield.peripherals objectAtIndex:indexPath.row];
-    
-    // Configure the cell...
-    cell.textLabel.text = aPeripheral.name;
-    cell.detailTextLabel.text = aPeripheral.identifier.UUIDString;
+    if(indexPath.section==0){
+        CBPeripheral* aPeripheral = [self.bleShield.peripherals objectAtIndex:indexPath.row];
+        
+        // Configure the cell...
+        cell.textLabel.text = aPeripheral.name;
+        cell.detailTextLabel.text = aPeripheral.identifier.UUIDString;
+        
+    }
+    else {
+        
+        cell.textLabel.text = @"Cancel";
+        cell.detailTextLabel.text = @"";
+        
+    }
     
     return cell;
 }
@@ -104,72 +123,38 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    NSLog(@"Attemp to connect to peripherals %ld", (long)indexPath.row);
-    CBPeripheral *aPeripheral = [self.bleShield.peripherals objectAtIndex:indexPath.row];
+    if(indexPath.section == 0) {
     
-    if (self.bleShield.activePeripheral && self.bleShield.activePeripheral.isConnected) {
-        [[self.bleShield CM] cancelPeripheralConnection:[self.bleShield activePeripheral]];
+        NSLog(@"Attemp to connect to peripherals %ld", (long)indexPath.row);
+        CBPeripheral *aPeripheral = [self.bleShield.peripherals objectAtIndex:indexPath.row];
+        
+        if (self.bleShield.activePeripheral && self.bleShield.activePeripheral.isConnected) {
+            [[self.bleShield CM] cancelPeripheralConnection:[self.bleShield activePeripheral]];
+        }
+        
+        //CHANGE 6: add code her to connect to the selected peripheral (aPeripheral)
+        [self.bleShield connectPeripheral: aPeripheral];
+    
     }
-    
-    //CHANGE 6: add code her to connect to the selected peripheral (aPeripheral)
-    [self.bleShield connectPeripheral: aPeripheral];
+        
+    [self.delegate didDismissModalView];
     
     
 }
 
-//-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-//    NSLog(@"prepare for segue");
-//
-//        UITableViewCell* cell = (UITableViewCell*)sender;
-//        ViewController *vc =  [segue destinationViewController];
-//
-//        vc.peripheral = sender;
-//
-//        //[self.navigationController pushViewController:ivc animated:YES];
-//}
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier  isEqual: @"updateBLE"]) {
+        // need do stuff?
+    }
+}
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
+- (IBAction)didCancelView:(id)sender {
+    NSLog(@"did dismiss modal view");
+    [self.delegate didDismissModalView];
+}
 
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+-(void)didDismissModalView:(id)sender{
+    [self.delegate didDismissModalView];
+}
 
 @end

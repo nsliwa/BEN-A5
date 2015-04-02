@@ -3,8 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>manualColor</key>
-	<false/>
+	<integer>0</integer>
 	<key>motorEnabled</key>
-	<true/>
+	<integer>1</integer>
 </dict>
 </plist>

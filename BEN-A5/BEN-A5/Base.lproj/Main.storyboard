@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="IZZ-bq-Jen">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEc-Zs-nsr">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -8,7 +8,7 @@
         <!--Root View Controller-->
         <scene sceneID="Fy6-Pz-hVU">
             <objects>
-                <tableViewController id="fNp-1o-fdm" customClass="MasterViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="bleViewModal" id="fNp-1o-fdm" customClass="MasterViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9Oa-QI-Ov2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -33,8 +33,22 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BLECancelCell" textLabel="fZR-J2-ese" style="IBUITableViewCellStyleDefault" id="WYt-As-ixB">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WYt-As-ixB" id="T7l-mE-h9d">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Cancel" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fZR-J2-ese">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="3NV-Ai-E5s" kind="push" id="H2H-H1-z2R"/>
+                                    <segue destination="QOX-kQ-Vcu" kind="unwind" unwindAction="updateBLE:" id="fX7-Ae-hHr"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -43,27 +57,29 @@
                             <outlet property="delegate" destination="fNp-1o-fdm" id="d0U-sg-Jbq"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Root View Controller" id="E5Y-fx-6Lj"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qoi-on-ANU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="QOX-kQ-Vcu" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="169" y="-398"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="whB-m6-SNO">
+        <scene sceneID="Ogm-hv-a8p">
             <objects>
-                <navigationController id="IZZ-bq-Jen" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Aba-IE-gGl">
+                <navigationController id="oEc-Zs-nsr" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="339-Vs-dRt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="fNp-1o-fdm" kind="relationship" relationship="rootViewController" id="oDg-Sa-Cnf"/>
+                        <segue destination="3NV-Ai-E5s" kind="relationship" relationship="rootViewController" id="WNh-Kh-2zD"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="esi-Sv-M9p" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Ic-PK-EY8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-228" y="-398"/>
+            <point key="canvasLocation" x="-454" y="428"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="QHG-Jk-xel">
@@ -84,13 +100,25 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="ztO-Kv-Xwn">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="XzO-0f-Kpt">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kQV-TU-Wbu">
+                                <rect key="frame" x="16" y="-42" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="BlueTooth_icon">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onBLEPressed:" destination="3NV-Ai-E5s" eventType="touchUpInside" id="1AZ-Ha-E8S"/>
+                                    <segue destination="fNp-1o-fdm" kind="modal" identifier="updateBLE" id="euX-4R-Fdu"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="CbZ-NW-eve">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iZ2-OV-WRs">
                                 <rect key="frame" x="263" y="-28" width="41" height="41"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button" image="settings">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Button" image="settings"/>
                                 <connections>
                                     <action selector="onSettingsPressed:" destination="3NV-Ai-E5s" eventType="touchUpInside" id="3Ny-8d-ICZ"/>
                                 </connections>
@@ -101,12 +129,13 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="bleButton" destination="kQV-TU-Wbu" id="g2q-lV-DNf"/>
                         <outlet property="tempImageView" destination="wrc-c4-osA" id="GrA-ZE-U5Z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fw9-f2-SUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="506" y="320"/>
+            <point key="canvasLocation" x="-30" y="404"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="cIV-5g-TP3">
@@ -297,6 +326,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="BlueTooth_icon" width="128" height="128"/>
         <image name="color_wheel_300x300" width="300" height="300"/>
         <image name="settings" width="512" height="512"/>
         <image name="thermometer" width="768" height="1056"/>

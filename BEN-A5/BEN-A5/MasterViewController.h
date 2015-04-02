@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol BLEModalViewControllerDelegate <NSObject>
+-(void)didDismissModalView;
+@end
+
 @interface MasterViewController : UITableViewController
+
+@property (nonatomic, weak) id<BLEModalViewControllerDelegate> delegate;
 
 @end

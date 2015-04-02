@@ -19,16 +19,20 @@
 @property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
 @property (strong, nonatomic) UIImageView *miserImageView;
 @property (strong, nonatomic) UIProgressView *progressBar;
+@property (weak, nonatomic) IBOutlet UIButton *bleButton;
 
 @property (nonatomic) float ambientTemperature;
 
 @property (strong, nonatomic) NSURLSession *session;
+
+
 
 @end
 
 @implementation ViewController
 
 SettingsViewController *addController;
+MasterViewController *bleController;
 
 -(BLE*)bleShield
 {
@@ -91,13 +95,12 @@ SettingsViewController *addController;
     [defaults registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"UserDefaults" ofType:@"plist"]]];
     
     // Testing miser animations
-
-    
-    NSData* data = [NSData dataWithBytes:@"Bloodborne" length:255];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: data, @"data",nil]] ;
+//    NSData* data = [NSData dataWithBytes:@"Bloodborne" length:255];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLEReceievedData_Button" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys: data, @"data",nil]] ;
 
     addController.delegate = self;
+    bleController.delegate = self;
 
 }
 
@@ -108,6 +111,14 @@ SettingsViewController *addController;
 
     // init progress bar
     self.progressBar.progress = [ self temperatureToProgress: self.ambientTemperature ];
+    
+    NSLog(@"view will appear: %f", self.ambientTemperature);
+    
+    if(!self.bleShield.isConnected){
+        [self.bleButton setBackgroundColor:[UIColor redColor]];
+    } else {
+        [self.bleButton setBackgroundColor:[UIColor clearColor]];
+    }
 
 }
 
@@ -150,8 +161,8 @@ NSTimer *rssiTimer;
 //    NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.ambientTemperature = [self temperatureToProgress:temp];
-        self.progressBar.progress = self.ambientTemperature;
+        self.ambientTemperature = temp;
+        self.progressBar.progress = [self temperatureToProgress: self.ambientTemperature];
         
         NSLog(@"Ambient temp: %f", self.ambientTemperature);
     });
@@ -234,6 +245,10 @@ NSTimer *rssiTimer;
 //http://stackoverflow.com/a/18740588
 -(void) OnBLEDidDisconnect:(NSNotification *)notification
 {
+    if(!self.bleShield.isConnected){
+        [self.bleButton setBackgroundColor:[UIColor redColor]];
+    }
+    
     [rssiTimer invalidate];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
@@ -261,10 +276,17 @@ NSTimer *rssiTimer;
     
     // Schedule to read RSSI every 1 sec.
     rssiTimer = [NSTimer scheduledTimerWithTimeInterval:(float)1.0 target:self selector:@selector(readRSSITimer:) userInfo:nil repeats:YES];
+    
+    [self.bleButton setBackgroundColor:[UIColor clearColor]];
+    
 }
 
 
 -(IBAction)updateSettings:(UIStoryboardSegue*)unwindeSegue {
+    
+}
+
+-(IBAction)updateBLE:(UIStoryboardSegue*)unwindeSegue {
     
 }
 
@@ -281,10 +303,28 @@ NSTimer *rssiTimer;
     
 }
 
+- (IBAction)onBLEPressed:(id)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    addController = [storyboard instantiateViewControllerWithIdentifier:@"bleViewModal"];
+    
+    
+    addController.delegate = self;
+    
+    [addController setModalPresentationStyle:UIModalPresentationFullScreen];
+    [self presentViewController:addController animated:YES completion:nil];
+    
+}
+
 -(void)didDismissModalView {
     NSLog(@"settingView - did dissmis modal");
     
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    if(!self.bleShield.isConnected){
+        [self.bleButton setBackgroundColor:[UIColor redColor]];
+    } else {
+        [self.bleButton setBackgroundColor:[UIColor clearColor]];
+    }
 }
 
 

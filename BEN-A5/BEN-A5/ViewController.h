@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "BLE.h"
 #import "SettingsViewController.h"
+#import "MasterViewController.h"
 
-@interface ViewController : UIViewController <NSURLSessionDelegate, ModalViewControllerDelegate>
+@interface ViewController : UIViewController <NSURLSessionDelegate, ModalViewControllerDelegate, BLEModalViewControllerDelegate>
 
 //@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 //@property (weak, nonatomic) IBOutlet UITextField *textField;
