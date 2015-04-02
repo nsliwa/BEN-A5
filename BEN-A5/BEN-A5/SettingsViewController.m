@@ -216,7 +216,13 @@
     }
     
     NSString *msg = [NSString stringWithFormat:@"%@%@", protocolID, payload];
-    NSData* packet = [msg dataUsingEncoding:NSUTF8StringEncoding];
+    const char *bytes = [msg UTF8String];
+    //NSData* packet = [msg dataUsingEncoding:NSUTF8StringEncoding];
+    NSData* packet = [NSData dataWithBytes:bytes length:3];
+    
+    /*NSUInteger len = [packet length];
+    Byte *byteData = (Byte*)malloc(len);
+    memcpy(byteData, [packet bytes], len);*/
     
 //    NSUInteger msgSize = 3;
 //    unsigned char *msgBuffer = (unsigned char *)calloc(msgSize, sizeof(unsigned char));
@@ -246,11 +252,14 @@
     
     
     if([self.bleShield isConnected]) {
-        [self.bleShield write: packet];
+        [self.bleShield write:packet];
+        NSLog(@"Message sent");
     }
     else {
         NSLog(@"No device connected");
     }
+    
+    //free(bytes);
     
 }
 @end
