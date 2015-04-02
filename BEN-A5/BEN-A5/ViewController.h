@@ -11,7 +11,8 @@
 #import "SettingsViewController.h"
 #import "MasterViewController.h"
 
-@interface ViewController : UIViewController <NSURLSessionDelegate, ModalViewControllerDelegate, BLEModalViewControllerDelegate>
+@interface ViewController : UIViewController <NSURLSessionDelegate, ModalViewControllerDelegate, BLEModalViewControllerDelegate, UIAlertViewDelegate>
+
 
 //@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 //@property (weak, nonatomic) IBOutlet UITextField *textField;

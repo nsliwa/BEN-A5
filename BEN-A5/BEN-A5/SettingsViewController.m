@@ -9,7 +9,6 @@
 #import "SettingsViewController.h"
 #import "AppDelegate.h"
 #import "BLE.h"
-#import "MBProgressHUD.h"
 
 @interface SettingsViewController ()
 @property (weak, nonatomic) IBOutlet UISwitch *switchVisualTemp;
@@ -32,6 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnBLEDidDisconnect:) name:@"BLEDidDisconnect" object:nil];
     
 }
 
@@ -231,16 +232,13 @@
 //http://stackoverflow.com/a/18740588
 -(void) OnBLEDidDisconnect:(NSNotification *)notification
 {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Bluetooth Disconnected"
+                                                    message:@"Bluetooth Not Available"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    
-    hud.mode = MBProgressHUDModeText;
-    hud.labelText = @"Bluetooth Disconnected";
-    hud.margin = 10.f;
-    hud.yOffset = 150.f;
-    hud.removeFromSuperViewOnHide = YES;
-    
-    [hud hide:YES afterDelay:3];
+    [alert show];
     
     NSLog(@"Disconnected");
 }

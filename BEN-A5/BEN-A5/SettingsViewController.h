@@ -13,7 +13,7 @@
 -(void)didDismissModalView;
 @end
 
-@interface SettingsViewController : UIViewController
+@interface SettingsViewController : UIViewController <UIAlertViewDelegate>
 
 @property (nonatomic, weak) id<ModalViewControllerDelegate> delegate;
 @property (weak, nonatomic) BLE *bleShield;
