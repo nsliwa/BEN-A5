@@ -80,7 +80,10 @@
     }
     else {
         NSLog(@"No device connected");
+        
         self.switchVisualTemp.on = !sender.on;
+        
+        [self alertBLEDisconnected ];
     }
     
     
@@ -111,6 +114,8 @@
     }
     else {
         NSLog(@"No device connected");
+        
+        [self alertBLEDisconnected ];
         
         self.switchManualColor.on = !sender.on;
     }
@@ -232,15 +237,19 @@
 //http://stackoverflow.com/a/18740588
 -(void) OnBLEDidDisconnect:(NSNotification *)notification
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Bluetooth Disconnected"
-                                                    message:@"Bluetooth Not Available"
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
+    NSLog(@"Disconnected in settings");
+}
+
+-(void) alertBLEDisconnected {
     
-    [alert show];
+     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Bluetooth Disconnected"
+     message:@"Bluetooth Not Available"
+     delegate:self
+     cancelButtonTitle:@"OK"
+     otherButtonTitles:nil];
+     
+     [alert show];
     
-    NSLog(@"Disconnected");
 }
 
 

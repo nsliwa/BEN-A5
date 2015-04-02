@@ -36,12 +36,12 @@
     
     self.refreshControl = refreshControl;
     
-    [self scanForDevices];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self scanForDevices];
     
     self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
 }
@@ -50,6 +50,8 @@
 // To connect, click on device name
 -(void)scanForDevices
 {
+    
+    NSLog(@"Scan for peripherals");
     // disconnect from any peripherals
     if (self.bleShield.activePeripheral)
         if(self.bleShield.activePeripheral.isConnected)

@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *bleButton;
 
 @property (strong, nonatomic) UIAlertView *alert;
+@property (strong, nonatomic) NSNumber *alertEnabled;
 
 @property (nonatomic) float ambientTemperature;
 
@@ -61,7 +62,7 @@ MasterViewController *bleController;
 
 -(float) ambientTemperature {
     if(!_ambientTemperature) {
-        _ambientTemperature = 0.0;
+        _ambientTemperature = -45.0;
     }
     
     return _ambientTemperature;
@@ -77,6 +78,13 @@ MasterViewController *bleController;
         [self.tempImageView addSubview:_progressBar];
     }
     return _progressBar;
+}
+
+-(NSNumber*)alertEnabled {
+    if(!_alertEnabled) {
+        _alertEnabled = @1;
+    }
+    return _alertEnabled;
 }
 
 - (void)viewDidLoad
@@ -253,15 +261,17 @@ NSTimer *rssiTimer;
     
     [rssiTimer invalidate];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Bluetooth Disconnected"
-                                                    message:@"Bluetooth Not Available"
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
+    if([self.alertEnabled  isEqual: @1]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Bluetooth Disconnected"
+                                                        message:@"Bluetooth Not Available"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        
+        [alert show];
     
-    [alert show];
-    
-    NSLog(@"Disconnected");
+    }
+    NSLog(@"Disconnected in Main");
 }
 
 //NEW did connect function
@@ -304,6 +314,8 @@ NSTimer *rssiTimer;
 }
 
 - (IBAction)onBLEPressed:(id)sender {
+    self.alertEnabled = @0;
+        
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     addController = [storyboard instantiateViewControllerWithIdentifier:@"bleViewModal"];
     
@@ -325,6 +337,8 @@ NSTimer *rssiTimer;
     } else {
         [self.bleButton setBackgroundColor:[UIColor clearColor]];
     }
+    
+    self.alertEnabled = @1;
 }
 
 
