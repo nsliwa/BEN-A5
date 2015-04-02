@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "AppDelegate.h"
 #import "BLE.h"
+#import "MBProgressHUD.h"
 
 #define kAPI_KEY @"7808cb7fa5475ae0"
 #define kState @"TX"
@@ -230,9 +231,21 @@ NSTimer *rssiTimer;
 
 
 //NEW did disconnect function
+//http://stackoverflow.com/a/18740588
 -(void) OnBLEDidDisconnect:(NSNotification *)notification
 {
     [rssiTimer invalidate];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"Bluetooth Disconnected";
+    hud.margin = 10.f;
+    hud.yOffset = 150.f;
+    hud.removeFromSuperViewOnHide = YES;
+    
+    [hud hide:YES afterDelay:3];
+    
     NSLog(@"Disconnected");
 }
 
