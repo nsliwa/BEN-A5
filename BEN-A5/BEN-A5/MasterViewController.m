@@ -43,7 +43,7 @@
     
     [self scanForDevices];
     
-    self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(30, 0, 0, 0);
 }
 
 // Scan for devices for 3 seconds, then populate table with UUID and peripheral name
