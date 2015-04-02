@@ -10,7 +10,7 @@
 #import "BLE.h"
 #import "SettingsViewController.h"
 
-@interface ViewController : UIViewController <NSURLSessionDelegate, ModalViewControllerDelegate>
+@interface ViewController : UIViewController <NSURLSessionDelegate, ModalViewControllerDelegate, UIAlertViewDelegate>
 
 //@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 //@property (weak, nonatomic) IBOutlet UITextField *textField;

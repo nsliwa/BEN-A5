@@ -9,7 +9,6 @@
 #import "ViewController.h"
 #import "AppDelegate.h"
 #import "BLE.h"
-#import "MBProgressHUD.h"
 
 #define kAPI_KEY @"7808cb7fa5475ae0"
 #define kState @"TX"
@@ -19,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
 @property (strong, nonatomic) UIImageView *miserImageView;
 @property (strong, nonatomic) UIProgressView *progressBar;
+@property (strong, nonatomic) UIAlertView *alert;
 
 @property (nonatomic) float ambientTemperature;
 
@@ -236,15 +236,13 @@ NSTimer *rssiTimer;
 {
     [rssiTimer invalidate];
     
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Bluetooth Disconnected"
+                                                    message:@"Bluetooth Not Available"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     
-    hud.mode = MBProgressHUDModeText;
-    hud.labelText = @"Bluetooth Disconnected";
-    hud.margin = 10.f;
-    hud.yOffset = 150.f;
-    hud.removeFromSuperViewOnHide = YES;
-    
-    [hud hide:YES afterDelay:3];
+    [alert show];
     
     NSLog(@"Disconnected");
 }
